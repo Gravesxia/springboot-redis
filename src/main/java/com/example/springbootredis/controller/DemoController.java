@@ -34,14 +34,14 @@ public class DemoController {
     public String setUser(@RequestParam(value = "id",required = false) Long id){
         String uuid = UuidUtil.getUUID();
         UserModel userModel = userService.getUser(id);
-        redisUtil.set(uuid,userModel);
+        redisUtil.set("token:" + uuid,userModel);
         return "success";
     }
 
     @RequestMapping(value="/getUser",method = RequestMethod.GET)
     @ResponseBody
     public Map<String,Object> getUser(@RequestParam(value = "uuid",required = false) String uuid){
-        UserModel user = (UserModel)redisUtil.get(uuid);
+        UserModel user = (UserModel)redisUtil.get("token:" + uuid);
         Map<String,Object> map = new HashMap<>();
         map.put("user",user);
         return map;
